@@ -100,7 +100,7 @@ where not exists (select 1 from MiniProfilers where Id = @Id)"; // this syntax w
 
             using (var conn = GetOpenConnection())
             {
-                var insertCount = conn.Execute(
+                conn.Execute(
                     Sql,
                     new
                         {
@@ -121,10 +121,7 @@ where not exists (select 1 from MiniProfilers where Id = @Id)"; // this syntax w
                             HasUserViewed = profiler.HasUserViewed
                         });
 
-                if (insertCount > 0)
-                {
-                    SaveTiming(conn, profiler, profiler.Root);
-                }
+                SaveTiming(conn, profiler, profiler.Root);
 
                 // we may have a missing client timing - re save
                 if (profiler.ClientTimings != null)
